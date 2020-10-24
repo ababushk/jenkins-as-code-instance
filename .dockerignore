@@ -1,0 +1,12 @@
+data
+certs
+filebeat
+*.pem
+password
+*.crt
+*.key
+builds
+custom_logs
+influxdb_data
+*.pfx
+*.p12

@@ -1,0 +1,83 @@
+jobs:
+  - script: >
+      folder('testjobs')
+  - script: >
+      pipelineJob('testjobs/influx_test') {
+        definition {
+          cps {
+            script("""\
+              stage("stage_one") {
+                 sleep 10
+                 echo 'Hello one'
+              }
+
+              stage("stage_two") {
+                 sleep 20
+                 echo 'Hello two'
+              }""".stripIndent())
+          }
+        }
+      }
+
+  - script: >
+      pipelineJob('kube_scripted') {
+        definition {
+          cps {
+            script("""\
+            podTemplate {
+              node(POD_LABEL) {
+              stage('run') {
+              sh 'sleep 20; echo OK running'
+              }
+            }
+            }
+            """.stripIndent())
+          }
+        }
+      }
+  - script: >
+      pipelineJob('kube_declarative') {
+        definition {
+          cps {
+            script('''\
+            pipeline {
+              agent {
+                kubernetes {
+                  yaml """
+            apiVersion: v1
+            kind: Pod
+            metadata:
+              labels:
+                some-label: some-label-value
+            spec:
+              containers:
+              - name: maven
+                image: maven:alpine
+                command:
+                - cat
+                tty: true
+              - name: busybox
+                image: busybox
+                command:
+                - cat
+                tty: true
+            """
+                }
+              }
+              stages {
+                stage('Run maven') {
+                  steps {
+                    container('maven') {
+                      sh 'mvn -version'
+                    }
+                    container('busybox') {
+                      sh '/bin/busybox'
+                    }
+                  }
+                }
+              }
+            }
+            '''.stripIndent())
+          }
+        }
+      }

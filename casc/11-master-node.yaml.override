@@ -1,0 +1,13 @@
+jenkins:
+  globalNodeProperties:
+  - envVars:
+      env:
+      - key: "MYVAR"
+        value: "MYVALUE"
+  labelString: "master"
+  markupFormatter:
+    rawHtml:
+      disableSyntaxHighlighting: false
+  mode: NORMAL
+  myViewsTabBar: "standard"
+  numExecutors: 0

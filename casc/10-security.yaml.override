@@ -1,0 +1,18 @@
+jenkins:
+  agentProtocols:
+    - "JNLP4-connect"
+    - "Ping"
+  crumbIssuer:
+    standard:
+      excludeClientIPFromCrumb: true
+  disableRememberMe: false
+  remotingSecurity:
+    enabled: true
+  slaveAgentPort: 50000
+  # securityRealm:
+  #   local:
+  #     allowsSignup: false
+  #     users:
+  #       - id: "admin"
+  #         password: "admin" # good enough for localhost :D
+  #authorizationStrategy: loggedInUsersCanDoAnything

@@ -1,0 +1,36 @@
+unclassified:
+  location:
+    url: http://jenkins:8080/
+
+jenkins:
+  clouds:
+  - kubernetes:
+      connectTimeout: 5
+      containerCap: 10
+      credentialsId: "kind-certificate"
+      maxRequestsPerHost: 1 # trying to reproduce a 'websocket timeout' issue
+      name: "kubernetes"
+      namespace: "default"
+      readTimeout: 15
+      serverCertificate: |-
+        -----BEGIN CERTIFICATE-----
+        MIIC5zCCAc+gAwIBAgIBADANBgkqhkiG9w0BAQsFADAVMRMwEQYDVQQDEwprdWJl
+        cm5ldGVzMB4XDTIxMDMyMDEyMDcyNFoXDTMxMDMxODEyMDcyNFowFTETMBEGA1UE
+        AxMKa3ViZXJuZXRlczCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBANzK
+        3FXUNzDghuipoyK1GcC2s2hIMrrZ16Q7Etk2SG4XI6XDMhJat2YvlF7wUDoSOkRp
+        MUd+enwyOEH/qTxBF7ssRaMQ3EpZPiQ+kirtCfXdCk7nFCRNp2sEqQDkIVmWJNTP
+        oVhz2hagXcVdV9HNoImxf3WkT4cmfFuckdMDRTkz/c+70O7ZP49CqDQSxTZwEsMc
+        ppkRlSHQqGkqsFGOIpfejrdlBTKb0zdtI1Jmn0NpYbKAwzJkP4MuaRtHecw93ngz
+        mm5fhOuRB355EjgSYj0hL0II7Bwj8vBmAnfJxrZvqKCZh//s6PsbD5Z6Woq6tf9J
+        MDQ2y82Hlgm5EhvUMUkCAwEAAaNCMEAwDgYDVR0PAQH/BAQDAgKkMA8GA1UdEwEB
+        /wQFMAMBAf8wHQYDVR0OBBYEFPkUqkdw9llyHlc6z3Sk+4iPjEsnMA0GCSqGSIb3
+        DQEBCwUAA4IBAQAaxIX034fgFII0nzPcuZ4KQFIewOEAGE9caRZn1UkPBnueu3Qq
+        uMhgDHdCpA4Y/RlFErssRPEd01CIntcwOzX40caRNDy+H5iJ73Fv/vih52tpq/fm
+        nBE6Ow4ZQELK3cQ18AiRA+rJw191O1xIg2kNJxRw07OD19HojxVHpIK8kwkE4DC0
+        kikwkYmdLvz3vGKYsQmKoERHXrVAiRrCHbHWCqaJDvJG5OhQfG73bFhnKYI45/cv
+        E9SPeedpaaBknprwmkhY4NESWazSmLRIMx6HYIwvjmNIxEhq/XNSiVCZKDU49uE0
+        x1AzeRhtyqercJACWyYdnBtwhJ1BXkFHk8BN
+        -----END CERTIFICATE-----
+
+      serverUrl: "https://kind-control-plane:6443"
+      waitForPodSec: 600

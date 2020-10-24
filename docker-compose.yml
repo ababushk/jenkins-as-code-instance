@@ -1,0 +1,61 @@
+---
+version: '3'
+
+networks:
+  jenkins:
+  kind:
+    external:
+      name: kind
+
+volumes:
+  filebeat_data: {}
+
+services:
+  influxdb:
+    image: influxdb:1.7.9
+    container_name: influxdb
+    restart: always
+    networks:
+      - jenkins
+    environment:
+      - INFLUXDB_DATA_MAX_SERIES_PER_DATABASE=0
+      - INFLUXDB_DATA_MAX_VALUES_PER_TAG=0
+    ports:
+      - 8086:8086
+    volumes:
+      # Data persistency
+      # sudo mkdir -p /srv/docker/influxdb/data
+      - ./influxdb_data:/var/lib/influxdb
+
+  jenkins:
+    container_name:
+      jenkins
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image:
+      oxygenxo/jenkins:2.235.5-jdk11
+    restart:
+      unless-stopped
+    ulimits:
+      nofile:
+        soft: 98304
+        hard: 98304
+    # network_mode: "host" # TODO: to display hostname of host in filebeat
+    networks:
+      - jenkins
+      - kind
+    ports:
+      - "8080:8080"
+      - "50000:50000" # JNLP agents port
+      - "5022:22" # SSH port
+
+    logging:
+      driver: json-file
+      options:
+        max-size: 4g
+    volumes:
+      # - ./data:/var/jenkins_home:rw # only until I'll create perfect immutable image
+      - ./builds:/var/jenkins_home/builds:rw
+      - ./custom_logs:/var/jenkins_home/custom_logs:rw
+      - ./secrets:/run/secrets
